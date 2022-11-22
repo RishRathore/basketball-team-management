@@ -1,16 +1,10 @@
 import { useEffect, useState }from 'react';
-import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
-import Checkbox from "@material-ui/core/Checkbox";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Select from "@material-ui/core/Select";
-import {useStyles, MenuProps, options, } from "../utils";
 import SelectOption from './SelectButton';
 
 
- function QuaterBlock() {
-
+ function QuaterBlock({setSelected, selected}) {
+    console.log('qb',selected )
     const [allPlayers, setAllPlayers] = useState([]);
     const [selectedPlayer, setSelectedPlayer] = useState({});
 

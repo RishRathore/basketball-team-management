@@ -10,20 +10,22 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { useDispatch } from "react-redux";
 import { addPlayer } from '../redux/features/playerSlices';
+import { v4 as uuidv4 } from 'uuid';
 import { MenuProps, useStyles, options, initialValues } from "../utils";
 import UserList from './Userlist';
+import { useSelector } from 'react-redux';
 
-const Player = () => {
+const Player = ({setSelected, selected}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [selected, setSelected] = useState([]);
+    // const [selected, setSelected] = useState([]);
     const [formValues, setFormValues] = useState(initialValues)
 
     const isAllSelected =
     options.length > 0 && selected.length === options.length;
 
-
+    const { players } = useSelector((state) => state.basketball)
   
       const handleSelectChange = (event) => {
         const value = event.target.value;
@@ -92,7 +94,7 @@ const Player = () => {
           delete newFormValues.height.error;
           delete newFormValues.height.errorMessage;
           
-          dispatch(addPlayer({...newFormValues, skills: selected})); 
+          dispatch(addPlayer({id: uuidv4(), firstName : newFormValues.firstName.value, lastName : newFormValues.lastName.value, skills: selected})); 
           setFormValues(initialValues);
           setSelected([])
         }
@@ -200,9 +202,9 @@ const Player = () => {
               Save
           </Button>
         </Box>
-        <Box>
-          <UserList formValues={formValues} />
-        </Box>
+        {players.length > 0 && <Box>
+          <UserList />
+        </Box>}
       </Box>
       </Box>
      );

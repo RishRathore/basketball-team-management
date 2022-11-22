@@ -12,7 +12,7 @@ function SelectOption({list, getSkills}) {
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
-    getSkills()
+    // getSkills()
   }, [])
 
   const handleChange = (event) => {
