@@ -1,60 +1,51 @@
-import { useEffect, useState }from 'react';
+import { useState }from 'react';
+// import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
-import SelectOption from './SelectButton';
+import PlayerSkillWrapper from './PlayerSkillWrapper';
+import Button from '@mui/material/Button';
 
 
- function QuaterBlock({setSelected, selected}) {
-    console.log('qb',selected )
-    const [allPlayers, setAllPlayers] = useState([]);
-    const [selectedPlayer, setSelectedPlayer] = useState({});
+ function QuaterBlock() {
+   
+    const [uniqueRole, setUniqueRole] = useState([]);
+    const [teamPlayers, setTeamPlayers] = useState([]);
 
-   useEffect(() => {
-    fetch(' https://mocki.io/v1/1006360e-a379-4e8b-9353-5f34f0c7d5b0')
-  .then(response => response.json())
-  .then(json => setAllPlayers(json))
-   }, []);
+    const setUniqueValue = (value, player, updated) => {
+      if(player) {
+        setTeamPlayers([...teamPlayers, value])
+      } else if(!player && updated){
+        setUniqueRole(updated)
+      } else {
+        setUniqueRole([...uniqueRole, value])
+      }
+    };
 
-//    useEffect(() => {
-//         const skills = player.filter(p => p.id == selectedId)[0].skills;
-//    },[]);
+    const handleSubmit = () => {
+      console.log('data')
+    }
 
-//    const getPlayerSkills = (id) => {
-//     // const skills = player.filter(p => p.id == id)[0].skills;
-//     console.log("skills", skills)
-//   }
   return (
     <Box
     sx={{ display: "flex",
-    flexDirection: "row"
-}}
-    >
-    <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-        display: "flex",
-        flexDirection: "column"
-      }}
-      noValidate
-      autoComplete="off"
-    >
-        <SelectOption list={allPlayers}/>
-        <SelectOption list={allPlayers}/>
-        <SelectOption list={allPlayers}/>
-    </Box>
-    <Box
-    sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-        display: "flex",
     flexDirection: "column"
-      }}
-      noValidate
-      autoComplete="off"
+  }}
     >
-    <SelectOption  setSelectedPlayer={setSelectedPlayer}/>
-        <SelectOption  setSelectedPlayer={setSelectedPlayer}/>
-        <SelectOption  setSelectedPlayer={setSelectedPlayer}/>
-        </Box></Box>
+      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
+      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
+      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
+      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
+      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
+      <Box>
+        <Button
+            type="button"
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+          >
+              Save
+          </Button>
+        </Box>
+    </Box>
   );
 }
 

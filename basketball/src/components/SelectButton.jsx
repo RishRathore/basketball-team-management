@@ -1,43 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import InputLabel from "@material-ui/core/InputLabel";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-import { MenuProps, useStyles, options } from "../utils";
+import {  useStyles } from "../utils";
 
-function SelectOption({list, getSkills}) {
+function SelectOption({list, selected, setSelected, isSkills, label, uniqueRoleErr}) {
   const classes = useStyles();
-  const [selected, setSelected] = useState([]);
-
-  useEffect(() => {
-    // getSkills()
-  }, [])
+ 
 
   const handleChange = (event) => {
     const value = event.target.value;
-    if (value[value.length - 1] === "all") {
-      setSelected(selected.length === options.length ? [] : options);
-      return;
-    }
     setSelected(value);
   };
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel id="mutiple-select-label">Multiple Select</InputLabel>
+      <InputLabel id="demo-simple-select-label">{}</InputLabel>
       <Select
-        labelId="mutiple-select-label"
-        multiple
-        value={selected}
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={selected?.skil || selected}
         onChange={handleChange}
-        renderValue={(selected) => selected.join(", ")}
-        MenuProps={MenuProps}
+        error={uniqueRoleErr?.err}
+        helperText={uniqueRoleErr?.err && uniqueRoleErr?.errMsg}
       >
-        {list?.map((option) => (
-          <MenuItem key={option.id} value={option.firstName}>
+        {!isSkills && list?.map((option) => (
+          <MenuItem key={option.id} value={option.id}>
             <ListItemText primary={option.firstName} />
+          </MenuItem>
+        ))}
+        {isSkills && list?.map((option) => (
+          <MenuItem key={option} value={option}>
+            <ListItemText primary={option} />
           </MenuItem>
         ))}
       </Select>

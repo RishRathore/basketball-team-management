@@ -42,3 +42,6 @@
   top: 18px;
   white-space: pre;
 }
+.dataGrid .MuiDataGrid-footerContainer{
+  display: none;
+}
