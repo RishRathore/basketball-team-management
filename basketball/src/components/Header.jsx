@@ -1,21 +1,30 @@
-import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
-const Header = ({isActive, setIsActive}) => {
+const Header = ({ activeTab, setActiveTab }) => {
+  const a11yProps = (index) => {
+    return {
+      id: `full-width-tab-${index}`,
+      'aria-controls': `full-width-tabpanel-${index}`,
+    };
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: `${isActive == 'compose' && 'black'}`}} onClick={() => setIsActive('compose')} >
-            Compose Team
-          </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: `${isActive == 'quarter' && 'black'}`}} onClick={() => setIsActive('quarter') } >
-            First Quarter
-          </Typography>
-        </Toolbar>
+        <Tabs
+          value={activeTab}
+          onChange={(e , index) => { setActiveTab(index) }}
+          indicatorColor="secondary"
+          textColor="inherit"
+          variant="fullWidth"
+          aria-label="full width tabs example"
+        >
+          <Tab label="Compose Team" {...a11yProps(0)} />
+          <Tab label="First Quarter" {...a11yProps(1)} />
+        </Tabs>
       </AppBar>
     </Box>
   );

@@ -1,22 +1,21 @@
 import { useState } from 'react';
+
 import Header from './components/Header';
 import Player from './components/Player';
 import QuarterBlock from './components/QuarterBlock';
-import './App.css';
-
-
 
 function App() {
-  const [isActive, setIsActive] = useState('compose');
+  const [activeTab, setActiveTab] = useState(0);
   const [selected, setSelected] = useState([]);
 
   return (
     <div className="App">
-      <Header isActive={isActive} setIsActive={setIsActive}/>
-      
-      {isActive === 'compose' &&  <Player selected={selected}setSelected={setSelected} /> }
-      {isActive === 'quarter' &&  <QuarterBlock selected={selected} setSelected={setSelected}/> }
-      
+      <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
+      {activeTab === 0 ?
+        <Player selected={selected} setSelected={setSelected} />
+        :
+        <QuarterBlock selected={selected} setSelected={setSelected}/>
+      }
     </div>
   );
 }

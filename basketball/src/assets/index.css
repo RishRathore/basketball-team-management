@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.App {
+  text-align: center;
+}
+
+.formBox .MuiFormControl-root .MuiFormHelperText-root{
+  position: absolute;
+  left: 505px;
+  top: 18px;
+  white-space: pre;
+}
