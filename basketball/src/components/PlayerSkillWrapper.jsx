@@ -9,15 +9,19 @@ const PlayerSkillWrapper = ({setUniqueValue, uniqueRole, teamPlayers}) => {
     const [selectedPlayer, setSelectedPlayer] = useState(null);
     const [selectedSkil, setSelectedSkil] = useState(null);
     const [uniqueRoleErr, setUniqueRoleErr] = useState({ err: false, errMsg: ''});
-
+    
      const verifyRole = (value) => {
+        console.log(value)
         setUniqueRoleErr({err: false, errMsg: ''})
+
         const isId = uniqueRole.find((c) => c.userId == selectedPlayer);
         const isSkil = uniqueRole.find((c) => c.skil == value);
 
         if(uniqueRole.length > 0 && isId) {
             if(isSkil && isId.userId == selectedPlayer) {
-                setUniqueRoleErr({ err : true, errMsg : 'Already selected'})
+                console.log(isId , "id")
+                console.log(isSkil,"skill")
+                setUniqueRoleErr(console.log({ err : true, errMsg : 'Already selected'}))
                 setSelectedSkil(isId);
         
             } else {
@@ -40,11 +44,15 @@ const PlayerSkillWrapper = ({setUniqueValue, uniqueRole, teamPlayers}) => {
      }
 
      const verifyPlayer = (value) => {
+        console.log('')
         if(teamPlayers && teamPlayers.includes(value)) {
+            setUniqueRoleErr({ err : true, errMsg : 'Already selected'})
             setSelectedPlayer(null)
+
         } else {
             setSelectedPlayer(value);
             setUniqueValue(value, true)
+            setUniqueRoleErr({ err : true, errMsg : ''})
         }
      }
     
@@ -86,6 +94,9 @@ const PlayerSkillWrapper = ({setUniqueValue, uniqueRole, teamPlayers}) => {
             list={players} 
             setSelected={verifyPlayer} 
             selected={selectedPlayer}
+            uniqueRoleErr={uniqueRoleErr}
+        
+            
         />
         <SelectButton
             isSkills
@@ -95,6 +106,7 @@ const PlayerSkillWrapper = ({setUniqueValue, uniqueRole, teamPlayers}) => {
             uniqueRoleErr={uniqueRoleErr}
         />
         {uniqueRoleErr?.err && <p>{uniqueRoleErr.errMsg} </p>}
+        
     </Box>);
 }
  

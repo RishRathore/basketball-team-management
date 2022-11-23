@@ -22,19 +22,19 @@ export default function TableBasic() {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell  align="centre"l>First Name</TableCell>
-            <TableCell align="centre">Last name</TableCell>
-            <TableCell align="centre">Height</TableCell>
-            <TableCell align="centre">Skills</TableCell>
+            <TableCell>First Name</TableCell>
+            <TableCell align="right">Last name</TableCell>
+            <TableCell align="right">Height</TableCell>
+            <TableCell align="right">Skills</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {players.map((row) => (
             <TableRow>
-              <TableCell align="centre">{row.firstName}</TableCell>
-              <TableCell align="centre">{row.lastName}</TableCell>
-              <TableCell align="centre">{row.height}</TableCell>
-              <TableCell align="centre">{row.skills}</TableCell>
+              <TableCell align="right">{row.firstName}</TableCell>
+              <TableCell align="right">{row.lastName}</TableCell>
+              <TableCell align="right">{row.height}</TableCell>
+              <TableCell align="right">{row.skills}</TableCell>
             </TableRow>
           ))}
         </TableBody>

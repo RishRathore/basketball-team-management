@@ -21,5 +21,10 @@ export const initialValues = {
     value: '',
     error: false,
     errorMessage: '* Required'
-  }
+  },
+  // position: {
+  //   value: '',
+  //   error: false,
+  //   errorMessage: '* Required'
+  // }
 }

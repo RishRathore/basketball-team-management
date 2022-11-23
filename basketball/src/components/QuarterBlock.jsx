@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import { createTeam } from '../redux/features/playerSlices';
 
 
- function QuaterBlock() {
+ const QuaterBlock = ({ selected }) => {
     const dispatch = useDispatch();
    const { teams,players } = useSelector((state) => state.basketball)
    
@@ -24,9 +24,10 @@ import { createTeam } from '../redux/features/playerSlices';
       }
     };
     console.log(players,"playersplayers");
-    const handleSubmit = (players) => {
-      // console.log(event.target.value);
-      dispatch(createTeam(players))
+    const handleSubmit = () => {
+      //  console.log(event.target.value);
+      // console.log(firstName, selected)
+      dispatch(createTeam(teams.firstName, selected ))
     }
 
   return (
@@ -45,7 +46,7 @@ import { createTeam } from '../redux/features/playerSlices';
             type="button"
             variant="contained"
             color="primary"
-            onClick={() => handleSubmit(players)}
+            onClick={handleSubmit}
           >
               Save
           </Button>

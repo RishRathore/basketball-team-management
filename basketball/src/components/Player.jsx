@@ -10,8 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
-
-import UserList from './Userlist';
+ import UserList from './Userlist';
 import { addPlayer } from '../redux/features/playerSlices';
 import { useStyles, MenuProps } from "../utils/styles";
 import { options, initialValues } from "../utils/constants";
@@ -169,6 +168,8 @@ const Player = ({ setSelected, selected }) => {
             required
             MenuProps={MenuProps}
             style={{ width: '100%' }}
+            // error={formValues.position.error}
+            // helperText={formValues.position.error && formValues.position.errorMessage}
           >
             <MenuItem
               value="all"
