@@ -8,35 +8,43 @@ import Checkbox from "@material-ui/core/Checkbox";
 import ListItemIcon from "@material-ui/core/Checkbox";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
- import UserList from './Userlist';
 import { addPlayer } from '../redux/features/playerSlices';
 import { useStyles, MenuProps } from "../utils/styles";
 import { options, initialValues } from "../utils/constants";
-
-const Player = ({ setSelected, selected }) => {
+const Player = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [selectedSkills, setSelectedSkills] = useState([]) 
   const [formValues, setFormValues] = useState(initialValues)
+  const [showNotifier, toggleNotifier] = useState(false)
+  const [notifierMsg, setNotifierMsg] = useState('')
 
   const isAllSelected =
-    options.length > 0 && selected.length === options.length;
+    options.length > 0 && selectedSkills.length === options.length;
 
-  const { players } = useSelector((state) => state.basketball)
-
-  const handleSelectChange = (event) => {
+    const handleSelectChange = (event) => {
     const value = event.target.value;
+    let selectedData;
+
     if (value[value.length - 1] === "all") {
-      setSelected(selected.length === options.length ? [] : options);
-      return;
-    }
-    setSelected(value);
+      selectedData = selectedSkills.length === options.length ? [] : options
+    } else selectedData = value
+
+    setSelectedSkills(selectedData)
+    setFormValues({
+      ...formValues,
+      skills: {
+        ...formValues['skills'],
+        value
+      }
+    })
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "height" && !/^[0-9]+$/.test(value)) {
+    if (name === "height" && !/^[0-9]+$/.test(value)) { // check data type number
       setFormValues({
         ...formValues,
         [name]: {
@@ -46,8 +54,7 @@ const Player = ({ setSelected, selected }) => {
           error: true
         }
       })
-
-    } else {
+    } if (name !== "skills" ) { // handling skills fields on handleSelectChange
       setFormValues({
         ...formValues,
         [name]: {
@@ -64,8 +71,7 @@ const Player = ({ setSelected, selected }) => {
     const formFields = Object.keys(formValues);
     let newFormValues = { ...formValues }
     let error;
-
-    let data = { id: uuidv4(), skills: selected }
+    let data = { id: uuidv4() }
 
     formFields.forEach(key => {
       data = {
@@ -74,11 +80,12 @@ const Player = ({ setSelected, selected }) => {
       }
     })
 
-    for (let index = 0; index < formFields.length; index++) {
+    for (let index = 0; index < formFields.length; index++) { // check empty fields
       const currentField = formFields[index];
       const currentValue = formValues[currentField].value;
 
-      if (currentValue === '') {
+      if (currentValue === '' ||
+        (currentField === 'skills' && currentValue.length === 0)) {
         newFormValues = {
           ...newFormValues,
           [currentField]: {
@@ -91,19 +98,19 @@ const Player = ({ setSelected, selected }) => {
       }
     }
     if (!error) {
-      delete newFormValues.firstName.error;
-      delete newFormValues.firstName.errorMessage;
-
-      delete newFormValues.lastName.error;
-      delete newFormValues.lastName.errorMessage;
-
-      delete newFormValues.height.error;
-      delete newFormValues.height.errorMessage;
-
       dispatch(addPlayer(data))
       setFormValues(initialValues);
-      setSelected([])
+      setSelectedSkills([])
+      handleNotifier()
+      setNotifierMsg('Player added !')
+    } else {
+      handleNotifier()
+      setNotifierMsg('Please check form !')
     }
+  }
+
+  const handleNotifier = () => {
+    toggleNotifier(!showNotifier)
   }
 
   return (
@@ -162,10 +169,12 @@ const Player = ({ setSelected, selected }) => {
           <Select
             labelId="mutiple-select-label"
             multiple
-            value={selected}
+            value={selectedSkills}
             onChange={handleSelectChange}
-            renderValue={(selected) => selected.join(", ")}
+            renderValue={(selectedSkills) => selectedSkills.join(", ")}
             required
+            error={formValues.skills.error}
+            helperText={formValues.skills.error && formValues.skills.errorMessage}  
             MenuProps={MenuProps}
             style={{ width: '100%' }}
             // error={formValues.position.error}
@@ -182,7 +191,7 @@ const Player = ({ setSelected, selected }) => {
                   classes={{ indeterminate: classes.indeterminateColor }}
                   checked={isAllSelected}
                   indeterminate={
-                    selected.length > 0 && selected.length < options.length
+                    selectedSkills.length > 0 && selectedSkills.length < options.length
                   }
                 />
               </ListItemIcon>
@@ -190,7 +199,7 @@ const Player = ({ setSelected, selected }) => {
             {options.map((option) => (
               <MenuItem key={option} value={option}>
                 <ListItemIcon>
-                  <Checkbox checked={selected.indexOf(option) > -1} />
+                  <Checkbox checked={selectedSkills.indexOf(option) > -1} />
                 </ListItemIcon>
                 <ListItemText primary={option} />
               </MenuItem>
@@ -207,9 +216,12 @@ const Player = ({ setSelected, selected }) => {
             Save
           </Button>
         </Box>
-        {players.length > 0 && 
-          <UserList />
-        }
+        <PlayerList />
+        <Notifier
+          open={showNotifier}
+          msg={notifierMsg}
+          handleClose={handleNotifier}
+        />
       </Box>
     </Box>
   );

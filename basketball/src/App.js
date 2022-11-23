@@ -12,7 +12,7 @@ function App() {
     <div className="App">
       <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
       {activeTab === 0 ?
-        <Player selected={selected} setSelected={setSelected} />
+        <Player />
         :
         <QuarterBlock selected={selected} setSelected={setSelected}/>
       }

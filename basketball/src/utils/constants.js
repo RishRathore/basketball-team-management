@@ -1,9 +1,9 @@
 export const options = [
-  'point guard(PG)',
-  'shooting guard(SG)',
-  'small forward(SF)',
-  'power forward(PF)',
-  'center(C)',
+  'Point guard(PG)',
+  'Shooting guard(SG)',
+  'Small forward(SF)',
+  'Power forward(PF)',
+  'Center(C)',
 ];
 
 export const initialValues = {
@@ -22,9 +22,9 @@ export const initialValues = {
     error: false,
     errorMessage: '* Required'
   },
-  // position: {
-  //   value: '',
-  //   error: false,
-  //   errorMessage: '* Required'
-  // }
+  skills: {
+    value: [],
+    error: false,
+    errorMessage: '* Required'
+  }
 }
