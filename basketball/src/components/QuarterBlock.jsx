@@ -8,7 +8,7 @@ import { createTeam } from "../redux/features/playerSlices";
 const QuaterBlock = () => {
   const dispatch = useDispatch();
 
-  const [teamPlayers, setTeamPlayers] = useState([]);   
+  const [teamPlayers, setTeamPlayers] = useState([]);
   const [uniqueRole, setUniqueRole] = useState([]);
   const [formErr, setFormErr] = useState(false);        // On submit Error check
 
@@ -24,12 +24,16 @@ const QuaterBlock = () => {
   };
 
   const handleSubmit = () => {
-    if(uniqueRole.length === 5 && teamPlayers.length === 5) {
+    if (uniqueRole.length === 5 && teamPlayers.length === 5) {
       dispatch(createTeam(uniqueRole));
     } else {
       setFormErr(true)
     }
   };
+
+  const handleSelect = ({ playerId, position, fieldName }) => {
+
+  }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -41,7 +45,7 @@ const QuaterBlock = () => {
           teamPlayers={teamPlayers}
         />
       ))}
-      <Box style={{marginTop: '30px'}}>
+      <Box style={{ marginTop: '30px' }}>
         <Button
           type="button"
           variant="contained"
@@ -51,7 +55,7 @@ const QuaterBlock = () => {
           Save
         </Button>
       </Box>
-      {formErr && <Box sx={{ color: 'red', margin: '10px'}}>Please fill all the fields!</Box>}
+      {formErr && <Box sx={{ color: 'red', margin: '10px' }}>Please fill all the fields!</Box>}
     </Box>
   );
 };
