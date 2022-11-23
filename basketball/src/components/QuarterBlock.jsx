@@ -1,12 +1,16 @@
 import { useState }from 'react';
-// import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import PlayerSkillWrapper from './PlayerSkillWrapper';
 import Button from '@mui/material/Button';
+import { createTeam } from '../redux/features/playerSlices';
 
 
  function QuaterBlock() {
+    const dispatch = useDispatch();
+   const { teams,players } = useSelector((state) => state.basketball)
    
+   console.log(teams,"------")
     const [uniqueRole, setUniqueRole] = useState([]);
     const [teamPlayers, setTeamPlayers] = useState([]);
 
@@ -19,9 +23,10 @@ import Button from '@mui/material/Button';
         setUniqueRole([...uniqueRole, value])
       }
     };
-
-    const handleSubmit = () => {
-      console.log('data')
+    console.log(players,"playersplayers");
+    const handleSubmit = (players) => {
+      // console.log(event.target.value);
+      dispatch(createTeam(players))
     }
 
   return (
@@ -40,7 +45,7 @@ import Button from '@mui/material/Button';
             type="button"
             variant="contained"
             color="primary"
-            onClick={handleSubmit}
+            onClick={() => handleSubmit(players)}
           >
               Save
           </Button>

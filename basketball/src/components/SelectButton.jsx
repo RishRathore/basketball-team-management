@@ -7,7 +7,7 @@ import Select from "@material-ui/core/Select";
 
 import {  useStyles } from "../utils";
 
-function SelectOption({list, selected, setSelected, isSkills, label, uniqueRoleErr}) {
+function SelectOption({list, selected, setSelected, isSkills,uniqueRoleErr}) {
   const classes = useStyles();
  
 
