@@ -8,9 +8,8 @@ import Box from "@material-ui/core/Box";
 import { useStyles } from "../utils/styles";
 
 
-function SelectOption({id, list, selected, setSelected, isSkills,uniqueRoleErr, label}) {
+function SelectOption({ id, list, selected, setSelected, isSkills, uniqueRoleErr, label }) {
   const classes = useStyles();
- 
 
   const handleChange = (event) => {
     const value = event.target.value;
