@@ -22,7 +22,7 @@ export const initialValues = {
     error: false,
     errorMessage: '* Required'
   },
-  skills: {
+  skills: { 
     value: [],
     error: false,
     errorMessage: '* Required'

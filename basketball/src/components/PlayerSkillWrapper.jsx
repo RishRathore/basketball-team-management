@@ -1,113 +1,154 @@
 import React, { useState } from "react";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 import SelectButton from "./SelectButton";
-import { useSelector } from 'react-redux';
+// import { useSelector } from "react-redux";
 
-const PlayerSkillWrapper = ({setUniqueValue, uniqueRole, teamPlayers}) => {
-     const { players = [] } = useSelector((state) => state.basketball);
+const PlayerSkillWrapper = ({
+  setUniqueValue,
+  uniqueRole,
+  teamPlayers,
+  id,
+}) => {
+//    const { players = [] } = useSelector((state) => state.basketball);
 
-    const [selectedPlayer, setSelectedPlayer] = useState(null);
-    const [selectedSkil, setSelectedSkil] = useState(null);
-    const [uniqueRoleErr, setUniqueRoleErr] = useState({ err: false, errMsg: ''});
-    
-     const verifyRole = (value) => {
-        console.log(value)
-        setUniqueRoleErr({err: false, errMsg: ''})
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [selectedSkil, setSelectedSkil] = useState(null);
+  const [roleErr, setRoleErr] = useState({
+    errMsg: "",
+    roleErr: false,
+  });
+  const [playerErr, setPlayerErr] = useState({
+    errMsg: "",
+    playerErr: false
+  });
 
-        const isId = uniqueRole.find((c) => c.userId == selectedPlayer);
-        const isSkil = uniqueRole.find((c) => c.skil == value);
+  const verifyRole = (value) => {
+    setRoleErr({errMsg: "",  roleErr: true });
 
-        if(uniqueRole.length > 0 && isId) {
-            if(isSkil && isId.userId == selectedPlayer) {
-                console.log(isId , "id")
-                console.log(isSkil,"skill")
-                setUniqueRoleErr(console.log({ err : true, errMsg : 'Already selected'}))
-                setSelectedSkil(isId);
-        
-            } else {
-                const players = {userId: selectedPlayer, skil: value}
-                const updated = uniqueRole.map(a => a.userId == selectedPlayer ? players : a)
-                setSelectedSkil(players);
-                setUniqueValue(players, false, updated)
-            }
-        } else if(!isId && isSkil) {
-            setUniqueRoleErr({ err : true, errMsg : 'Already selected'})
-            setSelectedSkil(null)
-        } else if(isSkil) {
-            setSelectedSkil(isSkil);
-            setUniqueValue(undefined, false, uniqueRole)
-        }  else {
-                const players = {userId: selectedPlayer, skil: value}
-                setSelectedSkil(players)
-                setUniqueValue(players, false)
-        }
-     }
+    const isId = uniqueRole.find((c) => c.userId === selectedPlayer);
+    const isSkil = uniqueRole.find((c) => c.skil === value);
 
-     const verifyPlayer = (value) => {
-        console.log('')
-        if(teamPlayers && teamPlayers.includes(value)) {
-            setUniqueRoleErr({ err : true, errMsg : 'Already selected'})
-            setSelectedPlayer(null)
+    if (uniqueRole.length > 0 && isId) {
+      if (isSkil && isId.userId === selectedPlayer) {
+        setRoleErr({errMsg: "Already selected", roleErr: true });
+        setSelectedSkil(value);
+      } else {
+        setRoleErr({errMsg: "", roleErr: false });
+        const players = { userId: selectedPlayer, skil: value };
+        const updated = uniqueRole.map((a) =>
+          a.userId === selectedPlayer ? players : a
+        );
+        setSelectedSkil(players);
+        setUniqueValue(players, false, updated);
+      }
+    } else if (!isId && isSkil) {
+        setRoleErr({errMsg: "Already selected", roleErr: true });
+      setSelectedSkil(isSkil);
+    } else if (isSkil) {
+      setSelectedSkil(isSkil);
+      setUniqueValue(null, false, uniqueRole);
+    } else {
+        setRoleErr({errMsg: "", roleErr: false });
+      const players = { userId: selectedPlayer, skil: value };
+      setSelectedSkil(players);
+      setUniqueValue(players, false);
+    }
+  };
 
-        } else {
-            setSelectedPlayer(value);
-            setUniqueValue(value, true)
-            setUniqueRoleErr({ err : true, errMsg : ''})
-        }
-     }
-    
+  const verifyPlayer = (value, id) => {
+    setPlayerErr({ playerErr: false, errMsg: ""});
 
-     
-    //  const players = [{
-    //      id : 1,
-    //      firstName: 'sheba',
-    //      skills: ['PG', 'SG', 'CS']
-    //     },
-    //     {
-    //         id : 2,
-    //         firstName: 'ritu',
-    //         skills: ['PG']
-    //        },
-    //        {
-    //         id : 3,
-    //         firstName: 'james',
-    //         skills: ['PG', 'SG']
-    //        },
-    //        {
-    //         id : 4,
-    //         firstName: 'jameu',
-    //         skills: ['PG', 'D']
-    //        }
-    // ]
+    const isId = teamPlayers.find((c) => c === value);
 
-        const skillsList = () => {
-            if(selectedPlayer) {
-                return players.filter(p => p.id == selectedPlayer)[0].skills;
-            } else {
-                return [];
-            }
-        };
+    if (teamPlayers && teamPlayers.includes(value)) {
+      if (teamPlayers[id] === value) {
+        setPlayerErr({ playerErr: false, errMsg: ""});
+        setSelectedPlayer(value);
+      } else if (isId === value) {
+        setPlayerErr({ playerErr: true, errMsg: "Already selected"});
+        setSelectedPlayer(value);
+      }
+    } else {
+      let teamPlayersRef = teamPlayers;
+      teamPlayersRef[id] = value;
+      setSelectedPlayer(value);
+      setUniqueValue(value, true, teamPlayersRef, id);
+    }
+  };
 
-    return ( 
-    <Box sx={{ margin: '25px'}}>
-        <SelectButton 
-            list={players} 
-            setSelected={verifyPlayer} 
-            selected={selectedPlayer}
-            uniqueRoleErr={uniqueRoleErr}
-        
-            
-        />
-        <SelectButton
-            isSkills
-            list={skillsList()}
-            setSelected={verifyRole}
-            selected={selectedSkil}
-            uniqueRoleErr={uniqueRoleErr}
-        />
-        {uniqueRoleErr?.err && <p>{uniqueRoleErr.errMsg} </p>}
-        
-    </Box>);
-}
- 
+  const players = [
+    {
+      id: "89980354-0b35-4844-9669-983a8e3b6819",
+      firstName: "a1",
+      lastName: "a1",
+      height: "12",
+      skills: ["Point guard(PG)", "Shooting guard(SG)"],
+    },
+  
+    {
+      id: "31572565-6f75-4b94-8cb6-5dae5df306de",
+      firstName: "b1",
+      lastName: "B1",
+      height: "5",
+      skills: ["Point guard(PG)", "Power forward(PF)"],
+    },
+  
+    {
+      id: "31572565-660d-4781-9348-0e620106bb68",
+      firstName: "C1",
+      lastName: "c1",
+      height: "65",
+      skills: ["Point guard(PG)", "Centre(C)", "Small forward(SF)"],
+    },
+    {
+      id: "5dae5df306de-660d-9348-9348-0e620106bb68",
+      firstName: "d1",
+      lastName: "d1",
+      height: "65",
+      skills: ["Small forward(SF)"],
+    },
+    {
+      id: "54996573-660d-4781-9348-0e620106bb68",
+      firstName: "s1",
+      lastName: "s1",
+      height: "65",
+      skills: ["Point guard(PG)", "Small forward(SF)"],
+    },
+    {
+      id: "0e620106bb68-660d-4778-9390-54996573",
+      firstName: "e1",
+      lastName: "e1",
+      height: "65",
+      skills: ["Shooting guard(SG)", "Small forward(SF)"],
+    },
+  ];
+  const skillsList = () => {
+    if (selectedPlayer) {
+      return players.filter((p) => p.id === selectedPlayer)[0].skills;
+    } else {
+      return [""];
+    }
+  };
+
+  return (
+    <Box sx={{ margin: "25px" }}>
+      <SelectButton
+        label="Player Name"
+        id={id}
+        list={players}
+        setSelected={verifyPlayer}
+        selected={selectedPlayer}
+        uniqueRoleErr={playerErr}
+      />
+      <SelectButton
+        label="Position"
+        list={skillsList()}
+        setSelected={verifyRole}
+        selected={selectedSkil}
+        uniqueRoleErr={roleErr}
+      />
+    </Box>
+  );
+};
+
 export default PlayerSkillWrapper;

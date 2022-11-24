@@ -1,58 +1,59 @@
-import { useState }from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import Box from '@mui/material/Box';
-import PlayerSkillWrapper from './PlayerSkillWrapper';
-import Button from '@mui/material/Button';
-import { createTeam } from '../redux/features/playerSlices';
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import Box from "@mui/material/Box";
+import PlayerSkillWrapper from "./PlayerSkillWrapper";
+import Button from "@mui/material/Button";
+import { createTeam } from "../redux/features/playerSlices";
 
+const QuaterBlock = () => {
+  const dispatch = useDispatch();
 
- const QuaterBlock = ({ selected }) => {
-    const dispatch = useDispatch();
-   const { teams,players } = useSelector((state) => state.basketball)
-   
-   console.log(teams,"------")
-    const [uniqueRole, setUniqueRole] = useState([]);
-    const [teamPlayers, setTeamPlayers] = useState([]);
+  const [teamPlayers, setTeamPlayers] = useState([]);   
+  const [uniqueRole, setUniqueRole] = useState([]);
+  const [formErr, setFormErr] = useState(false);        // On submit Error check
 
-    const setUniqueValue = (value, player, updated) => {
-      if(player) {
-        setTeamPlayers([...teamPlayers, value])
-      } else if(!player && updated){
-        setUniqueRole(updated)
-      } else {
-        setUniqueRole([...uniqueRole, value])
-      }
-    };
-    console.log(players,"playersplayers");
-    const handleSubmit = () => {
-      //  console.log(event.target.value);
-      // console.log(firstName, selected)
-      dispatch(createTeam(teams.firstName, selected ))
+  const setUniqueValue = (value, player, updated) => {
+    setFormErr(false)
+    if (player) {
+      setTeamPlayers(updated);
+    } else if (!player && updated) {
+      setUniqueRole(updated);
+    } else {
+      setUniqueRole([...uniqueRole, value]);
     }
+  };
+
+  const handleSubmit = () => {
+    if(uniqueRole.length === 5 && teamPlayers.length === 5) {
+      dispatch(createTeam(uniqueRole));
+    } else {
+      setFormErr(true)
+    }
+  };
 
   return (
-    <Box
-    sx={{ display: "flex",
-    flexDirection: "column"
-  }}
-    >
-      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
-      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
-      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
-      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
-      <PlayerSkillWrapper setUniqueValue={setUniqueValue} uniqueRole={uniqueRole} teamPlayers={teamPlayers}/>
+    <Box sx={{ display: "flex", flexDirection: "column" }}>
+      {[0, 1, 2, 3, 4].map((p) => (
+        <PlayerSkillWrapper
+          id={p}
+          setUniqueValue={setUniqueValue}
+          uniqueRole={uniqueRole}
+          teamPlayers={teamPlayers}
+        />
+      ))}
       <Box>
         <Button
-            type="button"
-            variant="contained"
-            color="primary"
-            onClick={handleSubmit}
-          >
-              Save
-          </Button>
-        </Box>
+          type="button"
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+        >
+          Save
+        </Button>
+      </Box>
+      {formErr && <Box sx={{ color: 'red', margin: '10px'}}>Please fill all the fields!</Box>}
     </Box>
   );
-}
+};
 
 export default QuaterBlock;

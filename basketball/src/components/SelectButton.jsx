@@ -4,41 +4,37 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Box from "@material-ui/core/Box";
 
 import { MenuProps, useStyles } from "../utils/styles";
 import { options } from "../utils/constants";
 
-function SelectOption({list, selected, setSelected, isSkills,uniqueRoleErr}) {
+function SelectOption({id, list, selected, setSelected, isSkills,uniqueRoleErr, label}) {
   const classes = useStyles();
  
 
   const handleChange = (event) => {
     const value = event.target.value;
-    setSelected(value);
+    setSelected(value, id);
   };
 
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel id="demo-simple-select-label">{}</InputLabel>
+    <FormControl className={classes.formControl}  sx={{margin: '10px'}}>
+      <InputLabel id={`${label}+${id}`}>{label}</InputLabel>
       <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
+        labelId={`${label}+${id}`}
+        id={id}
         value={selected?.skil || selected}
         onChange={handleChange}
-        error={uniqueRoleErr?.err}
-        helperText={uniqueRoleErr?.err && uniqueRoleErr?.errMsg}
+        error={uniqueRoleErr?.playerErr || uniqueRoleErr?.roleErr}
       >
-        {!isSkills && list?.map((option) => (
-          <MenuItem key={option.id} value={option.id}>
-            <ListItemText primary={option.firstName} />
-          </MenuItem>
-        ))}
-        {isSkills && list?.map((option) => (
-          <MenuItem key={option} value={option}>
-            <ListItemText primary={option} />
+        {list?.map((option) => (
+          <MenuItem key={option?.id || option} value={option?.id || option}>
+            <ListItemText primary={option?.firstName || option} />
           </MenuItem>
         ))}
       </Select>
+      {(uniqueRoleErr?.playerErr || uniqueRoleErr?.roleErr) && <Box>{uniqueRoleErr?.errMsg}</Box>}
     </FormControl>
   );
 }

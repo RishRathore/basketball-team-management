@@ -1,128 +1,144 @@
-import { useState } from 'react';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import InputLabel from "@material-ui/core/InputLabel";
+import { useState } from "react";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemIcon from "@material-ui/core/Checkbox";
 import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from 'uuid';
-import { addPlayer } from '../redux/features/playerSlices';
+import { v4 as uuidv4 } from "uuid";
+
+import { addPlayer } from "../redux/features/playerSlices";
 import { useStyles, MenuProps } from "../utils/styles";
 import { options, initialValues } from "../utils/constants";
+import PlayerList from "./PlayerList";
+import Notifier from "./Notifier";
+
 const Player = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [selectedSkills, setSelectedSkills] = useState([]) 
-  const [formValues, setFormValues] = useState(initialValues)
-  const [showNotifier, toggleNotifier] = useState(false)
-  const [notifierMsg, setNotifierMsg] = useState('')
 
-  const isAllSelected =
-    options.length > 0 && selectedSkills.length === options.length;
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [formValues, setFormValues] = useState(initialValues);
+  const [showNotifier, toggleNotifier] = useState(false);
+  const [notifierMsg, setNotifierMsg] = useState("");
 
-    const handleSelectChange = (event) => {
+  // const isAllSelected =
+  //   options.length > 0 && selectedSkills.length === options.length;
+
+  const handleSelectChange = (event) => {
     const value = event.target.value;
     let selectedData;
 
     if (value[value.length - 1] === "all") {
-      selectedData = selectedSkills.length === options.length ? [] : options
-    } else selectedData = value
+      selectedData = selectedSkills.length === options.length ? [] : options;
+    } else selectedData = value;
 
-    setSelectedSkills(selectedData)
+    setSelectedSkills(selectedData);
     setFormValues({
       ...formValues,
       skills: {
-        ...formValues['skills'],
-        value
-      }
-    })
+        // Only setting skills
+        ...formValues["skills"],
+        value,
+        errorMessage: "",
+        error: false,
+      },
+    });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "height" && !/^[0-9]+$/.test(value)) { // check data type number
+    if (name === "height" && !/^[0-9]+$/.test(value)) {
+      // check data type number
       setFormValues({
         ...formValues,
         [name]: {
           ...formValues[name],
           value: "",
           errorMessage: "Height must be a number",
-          error: true
-        }
-      })
-    } if (name !== "skills" ) { // handling skills fields on handleSelectChange
+          error: true,
+        },
+      });
+    } else if (name !== "skills") {
+      // handling skills fields on handleSelectChange
       setFormValues({
         ...formValues,
         [name]: {
           ...formValues[name],
-          value
-        }
-      })
+          value,
+          errorMessage: "",
+          error: false,
+        },
+      });
     }
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formFields = Object.keys(formValues);
-    let newFormValues = { ...formValues }
+    let newFormValues = { ...formValues };
     let error;
-    let data = { id: uuidv4() }
+    let data = { id: uuidv4() };
 
-    formFields.forEach(key => {
+    formFields.forEach((key) => {
       data = {
         ...data,
-        [key]: formValues[key].value
-      }
-    })
+        [key]: formValues[key].value,
+      };
+    });
 
-    for (let index = 0; index < formFields.length; index++) { // check empty fields
+    for (let index = 0; index < formFields.length; index++) {
+      // check empty fields
       const currentField = formFields[index];
       const currentValue = formValues[currentField].value;
 
-      if (currentValue === '' ||
-        (currentField === 'skills' && currentValue.length === 0)) {
+      if (
+        currentValue === "" ||
+        (currentField === "skills" && currentValue.length === 0)
+      ) {
         newFormValues = {
           ...newFormValues,
           [currentField]: {
             ...newFormValues[currentField],
-            error: true
-          }
-        }
+            error: true,
+          },
+        };
         setFormValues(newFormValues);
         error = true;
       }
     }
     if (!error) {
-      dispatch(addPlayer(data))
+      dispatch(addPlayer(data));
       setFormValues(initialValues);
-      setSelectedSkills([])
-      handleNotifier()
-      setNotifierMsg('Player added !')
+      setSelectedSkills([]);
+      handleNotifier();
+      setNotifierMsg("Player added !");
     } else {
-      handleNotifier()
-      setNotifierMsg('Please check form !')
+      handleNotifier();
+      setNotifierMsg("Please check form !");
     }
-  }
+  };
 
   const handleNotifier = () => {
-    toggleNotifier(!showNotifier)
-  }
+    toggleNotifier(!showNotifier);
+  };
 
   return (
-    <Box style={{ maxWidth: '500px', margin: '30px auto 0px auto' }} className="formBox">
+    <Box
+      style={{ maxWidth: "500px", margin: "30px auto 0px auto" }}
+      className="formBox"
+    >
       <Box
         component="form"
         sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
-          'display': 'flex',
-          'flexDirection': 'column',
-          'justify-content': 'centre',
-          'align-items': 'centre'
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+          display: "flex",
+          flexDirection: "column",
+          "justify-content": "centre",
+          "align-items": "centre",
         }}
         noValidate
         autoComplete="off"
@@ -136,9 +152,11 @@ const Player = () => {
           placeholder="First Name"
           onChange={handleChange}
           error={formValues.firstName.error}
-          helperText={formValues.firstName.error && formValues.firstName.errorMessage}
+          helperText={
+            formValues.firstName.error && formValues.firstName.errorMessage
+          }
           required
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         />
         <TextField
           id="Last Name"
@@ -148,9 +166,11 @@ const Player = () => {
           placeholder="Last Name"
           onChange={handleChange}
           error={formValues.lastName.error}
-          helperText={formValues.lastName.error && formValues.lastName.errorMessage}
+          helperText={
+            formValues.lastName.error && formValues.lastName.errorMessage
+          }
           required
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         />
         <TextField
           id="Height"
@@ -162,40 +182,28 @@ const Player = () => {
           error={formValues.height.error}
           helperText={formValues.height.error && formValues.height.errorMessage}
           required
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         />
-        <Box style={{ margin: '20px -8px 25px 14px' }}>
-          <InputLabel style={{ textAlign: 'left' }} id="mutiple-select-label">Position</InputLabel>
-          <Select
-            labelId="mutiple-select-label"
-            multiple
+        <Box className={classes.formControl}>
+          <TextField
+            name="skills"
+            variant="filled"
+            select
             value={selectedSkills}
-            onChange={handleSelectChange}
-            renderValue={(selectedSkills) => selectedSkills.join(", ")}
             required
             error={formValues.skills.error}
-            helperText={formValues.skills.error && formValues.skills.errorMessage}  
-            MenuProps={MenuProps}
-            style={{ width: '100%' }}
-            // error={formValues.position.error}
-            // helperText={formValues.position.error && formValues.position.errorMessage}
+            helperText={
+              formValues.skills.error && formValues.skills.errorMessage
+            }
+            style={{ width: "100%" }}
+            SelectProps={{
+              multiple: true,
+              value: selectedSkills,
+              onChange: handleSelectChange,
+              MenuProps,
+              renderValue: (selectedSkills) => selectedSkills.join(", "),
+            }}
           >
-            <MenuItem
-              value="all"
-              classes={{
-                root: isAllSelected ? classes.selectedAll : ""
-              }}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  classes={{ indeterminate: classes.indeterminateColor }}
-                  checked={isAllSelected}
-                  indeterminate={
-                    selectedSkills.length > 0 && selectedSkills.length < options.length
-                  }
-                />
-              </ListItemIcon>
-            </MenuItem>
             {options.map((option) => (
               <MenuItem key={option} value={option}>
                 <ListItemIcon>
@@ -204,7 +212,7 @@ const Player = () => {
                 <ListItemText primary={option} />
               </MenuItem>
             ))}
-          </Select>
+          </TextField>
         </Box>
         <Box>
           <Button
@@ -225,6 +233,6 @@ const Player = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default Player;

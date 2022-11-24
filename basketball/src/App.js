@@ -6,15 +6,14 @@ import QuarterBlock from './components/QuarterBlock';
 
 function App() {
   const [activeTab, setActiveTab] = useState(0);
-  const [selected, setSelected] = useState([]);
-
+ 
   return (
     <div className="App">
       <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
       {activeTab === 0 ?
         <Player />
         :
-        <QuarterBlock selected={selected} setSelected={setSelected}/>
+        <QuarterBlock />
       }
     </div>
   );
