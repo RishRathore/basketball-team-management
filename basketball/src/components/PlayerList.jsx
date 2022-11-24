@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -18,18 +17,18 @@ import { useSelector } from 'react-redux';
         <TableHead>
           <TableRow>
             <TableCell>First Name</TableCell>
-            <TableCell align="centre">Last name</TableCell>
-            <TableCell align="centre">Height</TableCell>
-            <TableCell align="centre">Skills</TableCell>
+            <TableCell center>Last name</TableCell>
+            <TableCell center>Height</TableCell>
+            <TableCell center>Skills</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {players.map((row) => (
-            <TableRow>
-              <TableCell align="centre">{row.firstName}</TableCell>
-              <TableCell align="centre">{row.lastName}</TableCell>
-              <TableCell align="centre">{row.height}</TableCell>
-              <TableCell align="centre">{row.skills}</TableCell>
+          {players.map((row, i) => (
+            <TableRow key={i}>
+              <TableCell center>{row.firstName}</TableCell>
+              <TableCell center>{row.lastName}</TableCell>
+              <TableCell center>{row.height}</TableCell>
+              <TableCell center>{row.skills}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -7,8 +7,7 @@ import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
 import { useStyles } from "../utils/styles";
 
-
-function SelectOption({ id, list, selected, setSelected, uniqueRoleErr, label }) {
+function SelectOption({ id, list, selected, setSelected, fieldErr, label }) {
   const classes = useStyles();
 
   const handleChange = (event) => {
@@ -22,9 +21,9 @@ function SelectOption({ id, list, selected, setSelected, uniqueRoleErr, label })
       <Select
         labelId={`${label}+${id}`}
         id={id}
-        value={selected?.skil || selected}
+        value={selected?.position || selected}
         onChange={handleChange}
-        error={uniqueRoleErr?.playerErr || uniqueRoleErr?.roleErr}
+        error={fieldErr?.playerErr || fieldErr?.roleErr}
       >
         {list?.map((option) => (
           <MenuItem key={option?.id || option} value={option?.id || option}>
@@ -32,7 +31,7 @@ function SelectOption({ id, list, selected, setSelected, uniqueRoleErr, label })
           </MenuItem>
         ))}
       </Select>
-      {(uniqueRoleErr?.playerErr || uniqueRoleErr?.roleErr) && <Box>{uniqueRoleErr?.errMsg}</Box>}
+      {(fieldErr?.playerErr || fieldErr?.roleErr) && <Box>{fieldErr?.errMsg}</Box>}
     </FormControl>
   );
 }

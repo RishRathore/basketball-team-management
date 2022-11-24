@@ -10,11 +10,7 @@ function App() {
   return (
     <div className="App">
       <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
-      {activeTab === 0 ?
-        <Player />
-        :
-        <QuarterBlock />
-      }
+      {activeTab === 0 ? <Player /> : <QuarterBlock />}
     </div>
   );
 }

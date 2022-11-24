@@ -4,7 +4,7 @@ export const playerSlice = createSlice({
   name: "basketball",
   initialState: {
     players: [],
-    teams: [],
+    teams: {},
   },
   reducers: {
     addPlayer: (state, action) => {
@@ -12,7 +12,7 @@ export const playerSlice = createSlice({
     },
 
     createTeam: (state, action) => {
-        state.teams= [...state.teams, action.payload];
+        state.teams = action.payload
     },
    
   },

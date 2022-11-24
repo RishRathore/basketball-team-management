@@ -120,8 +120,8 @@ const Player = () => {
           '& .MuiTextField-root': { m: 1, width: '25ch' },
           'display': 'flex',
           'flexDirection': 'column',
-          'justify-content': 'centre',
-          'align-items': 'centre'
+          'justifyContent': 'centre',
+          'alignItems': 'centre'
         }}
         noValidate
         autoComplete="off"

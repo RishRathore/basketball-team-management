@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,7 +19,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   };
 
   const onTabChange = (index) => {
-    if (index === 1 && players.length !== 5) setOpen(true);
+    if (index === 1 && players.length < 5) setOpen(true);
     else setActiveTab(index);
   };
 
@@ -37,7 +37,11 @@ const Header = ({ activeTab, setActiveTab }) => {
           <Tab label="Compose Team" {...a11yProps(0)} />
           <Tab label="First Quarter" {...a11yProps(1)} />
         </Tabs>
-        <NotificationDialog open={open} onClose={() => setOpen(false)} message="First quarter should have 5 players at least" />
+        <NotificationDialog
+          open={open}
+          onClose={() => setOpen(false)}
+          message="First quarter should have 5 players at least"
+        />
       </AppBar>
     </Box>
   );
