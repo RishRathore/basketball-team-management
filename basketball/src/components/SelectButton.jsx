@@ -5,9 +5,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
+import { useStyles } from "../utils/styles";
 
-import { MenuProps, useStyles } from "../utils/styles";
-import { options } from "../utils/constants";
 
 function SelectOption({id, list, selected, setSelected, isSkills,uniqueRoleErr, label}) {
   const classes = useStyles();

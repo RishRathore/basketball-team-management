@@ -41,7 +41,7 @@ const QuaterBlock = () => {
           teamPlayers={teamPlayers}
         />
       ))}
-      <Box>
+      <Box style={{marginTop: '30px'}}>
         <Button
           type="button"
           variant="contained"

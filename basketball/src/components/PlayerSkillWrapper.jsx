@@ -65,7 +65,7 @@ const PlayerSkillWrapper = ({
         setPlayerErr({ playerErr: false, errMsg: ""});
         setSelectedPlayer(value);
       } else if (isId === value) {
-        setPlayerErr({ playerErr: true, errMsg: "Already selected"});
+        setPlayerErr({ playerErr: true, errMsg: "Player can be selected only once"});
         setSelectedPlayer(value);
       }
     } else {
@@ -131,7 +131,7 @@ const PlayerSkillWrapper = ({
   };
 
   return (
-    <Box sx={{ margin: "25px" }}>
+    <Box sx={{ margin: "25px 0px 0px 0px", padding: '0px 15px 0px 15px', display: 'flex', gap: '20px', justifyContent: 'center' }}>
       <SelectButton
         label="Player Name"
         id={id}
