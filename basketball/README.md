@@ -19,7 +19,17 @@
   - show player list below form
   - create team ( first quater)
   - apply validations
+  - reset forms on data submit
   - show warning if created players count is less than 5 on Team page
+
+# Comments
+- The test task was really interesting
+- I tried to build it upto the requirements
+- I did it in chunks, as I was working through office
+- If I got more time I can write more better code
+- Still some how I created the application
+
+
 
 
 
