@@ -169,8 +169,9 @@ const Player = () => {
               name="skills"
               variant="filled"
               select
+              label="Skills"
               // value={selectedSkills}
-              required
+              placeholder="Skills"
               error={formValues.skills.error}
               helperText={
                 formValues.skills.error && formValues.skills.errorMessage

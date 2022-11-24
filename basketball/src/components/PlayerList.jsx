@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 
   return (
     <TableContainer component={Paper}>
+        <h2 align="left">Player List</h2>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>

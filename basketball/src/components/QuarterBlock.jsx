@@ -31,10 +31,6 @@ const QuaterBlock = () => {
     }
   };
 
-  const handleSelect = ({ playerId, position, fieldName }) => {
-
-  }
-
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       {[0, 1, 2, 3, 4].map((p) => (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import SelectButton from "./SelectButton";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const PlayerSkillWrapper = ({
   setUniqueValue,
@@ -9,7 +9,7 @@ const PlayerSkillWrapper = ({
   teamPlayers,
   id,
 }) => {
-//    const { players = [] } = useSelector((state) => state.basketball);
+  const { players = [] } = useSelector((state) => state.basketball);
 
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [selectedSkil, setSelectedSkil] = useState(null);
@@ -76,52 +76,6 @@ const PlayerSkillWrapper = ({
     }
   };
 
-  const players = [
-    {
-      id: "89980354-0b35-4844-9669-983a8e3b6819",
-      firstName: "a1",
-      lastName: "a1",
-      height: "12",
-      skills: ["Point guard(PG)", "Shooting guard(SG)"],
-    },
-  
-    {
-      id: "31572565-6f75-4b94-8cb6-5dae5df306de",
-      firstName: "b1",
-      lastName: "B1",
-      height: "5",
-      skills: ["Point guard(PG)", "Power forward(PF)"],
-    },
-  
-    {
-      id: "31572565-660d-4781-9348-0e620106bb68",
-      firstName: "C1",
-      lastName: "c1",
-      height: "65",
-      skills: ["Point guard(PG)", "Centre(C)", "Small forward(SF)"],
-    },
-    {
-      id: "5dae5df306de-660d-9348-9348-0e620106bb68",
-      firstName: "d1",
-      lastName: "d1",
-      height: "65",
-      skills: ["Small forward(SF)"],
-    },
-    {
-      id: "54996573-660d-4781-9348-0e620106bb68",
-      firstName: "s1",
-      lastName: "s1",
-      height: "65",
-      skills: ["Point guard(PG)", "Small forward(SF)"],
-    },
-    {
-      id: "0e620106bb68-660d-4778-9390-54996573",
-      firstName: "e1",
-      lastName: "e1",
-      height: "65",
-      skills: ["Shooting guard(SG)", "Small forward(SF)"],
-    },
-  ];
   const skillsList = () => {
     if (selectedPlayer) {
       return players.filter((p) => p.id === selectedPlayer)[0].skills;
