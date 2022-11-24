@@ -9,8 +9,7 @@ import Paper from '@mui/material/Paper';
 import { useSelector } from 'react-redux';
 
  const PlayerList = () => {
-
-    const { players } = useSelector((state) => state.basketball)
+  const { players } = useSelector((state) => state.basketball)
 
   return (
     <TableContainer component={Paper}>

@@ -2,13 +2,12 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import InputLabel from "@material-ui/core/InputLabel";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemIcon from "@material-ui/core/Checkbox";
 import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import { useDispatch } from "react-redux";
+import FormControl from "@material-ui/core/FormControl";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from 'uuid';
 
 import PlayerList from './PlayerList';
@@ -20,10 +19,13 @@ import { options, initialValues } from "../utils/constants";
 const Player = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
   const [selectedSkills, setSelectedSkills] = useState([])
   const [formValues, setFormValues] = useState(initialValues)
   const [showNotifier, toggleNotifier] = useState(false)
   const [notifierMsg, setNotifierMsg] = useState('')
+
+  const { players } = useSelector(state => state.basketball);
 
   const isAllSelected =
     options.length > 0 && selectedSkills.length === options.length;
@@ -58,12 +60,14 @@ const Player = () => {
           error: true
         }
       })
-    } if (name !== "skills") { // handling skills fields on handleSelectChange
+    } else if (name !== "skills") { // handling skills fields on handleSelectChange
       setFormValues({
         ...formValues,
         [name]: {
           ...formValues[name],
-          value
+          value,
+          errorMessage: "",
+          error: false,
         }
       })
     }
@@ -118,7 +122,7 @@ const Player = () => {
   }
 
   return (
-    <Box style={{ maxWidth: '500px', margin: '30px auto 0px auto' }} className="formBox">
+    <Box style={{ maxWidth: '100%', padding: '0px 15px 0px 15px' }} className="formBox">
       <Box
         component="form"
         sx={{
@@ -132,93 +136,90 @@ const Player = () => {
         autoComplete="off"
         onSubmit={handleSubmit}
       >
-        <TextField
-          id="First Name"
-          variant="filled"
-          name="firstName"
-          value={formValues.firstName.value}
-          placeholder="First Name"
-          onChange={handleChange}
-          error={formValues.firstName.error}
-          helperText={formValues.firstName.error && formValues.firstName.errorMessage}
-          required
-          style={{ width: '100%' }}
-        />
-        <TextField
-          id="Last Name"
-          variant="filled"
-          name="lastName"
-          value={formValues.lastName.value}
-          placeholder="Last Name"
-          onChange={handleChange}
-          error={formValues.lastName.error}
-          helperText={formValues.lastName.error && formValues.lastName.errorMessage}
-          required
-          style={{ width: '100%' }}
-        />
-        <TextField
-          id="Height"
-          variant="filled"
-          name="height"
-          value={formValues.height.value}
-          placeholder="Height"
-          onChange={handleChange}
-          error={formValues.height.error}
-          helperText={formValues.height.error && formValues.height.errorMessage}
-          required
-          style={{ width: '100%' }}
-        />
-        <Box style={{ margin: '20px -8px 25px 14px' }}>
-          <InputLabel style={{ textAlign: 'left' }} id="mutiple-select-label">Position</InputLabel>
-          <Select
-            labelId="mutiple-select-label"
-            multiple
-            value={selectedSkills}
-            onChange={handleSelectChange}
-            renderValue={(selectedSkills) => selectedSkills.join(", ")}
+        <Box style={{ maxWidth: "500px", margin: "30px auto 0px auto" }}>
+          <TextField
+            id="First Name"
+            variant="filled"
+            name="firstName"
+            value={formValues.firstName.value}
+            placeholder="First Name"
+            onChange={handleChange}
+            error={formValues.firstName.error}
+            helperText={formValues.firstName.error && formValues.firstName.errorMessage}
             required
-            error={formValues.skills.error}
-            helperText={formValues.skills.error && formValues.skills.errorMessage}
-            MenuProps={MenuProps}
             style={{ width: '100%' }}
-          >
-            <MenuItem
-              value="all"
-              classes={{
-                root: isAllSelected ? classes.selectedAll : ""
+          />
+          <TextField
+            id="Last Name"
+            variant="filled"
+            name="lastName"
+            value={formValues.lastName.value}
+            placeholder="Last Name"
+            onChange={handleChange}
+            error={formValues.lastName.error}
+            helperText={formValues.lastName.error && formValues.lastName.errorMessage}
+            required
+            style={{ width: '100%' }}
+          />
+          <TextField
+            id="Height"
+            variant="filled"
+            name="height"
+            value={formValues.height.value}
+            placeholder="Height"
+            onChange={handleChange}
+            error={formValues.height.error}
+            helperText={formValues.height.error && formValues.height.errorMessage}
+            required
+            style={{ width: '100%' }}
+          />
+          <FormControl style={{ width: "100%", marginBottom: '15px' }} className={classes.formControl}>
+            <TextField
+              name="skills"
+              variant="filled"
+              select
+              // value={selectedSkills}
+              required
+              error={formValues.skills.error}
+              helperText={
+                formValues.skills.error && formValues.skills.errorMessage
+              }
+              style={{ width: "100%" }}
+              SelectProps={{
+                multiple: true,
+                value: selectedSkills,
+                onChange: handleSelectChange,
+                MenuProps,
+                renderValue: (selectedSkills) => selectedSkills.join(", "),
               }}
             >
-              <ListItemIcon>
-                <Checkbox
-                  classes={{ indeterminate: classes.indeterminateColor }}
-                  checked={isAllSelected}
-                  indeterminate={
-                    selectedSkills.length > 0 && selectedSkills.length < options.length
-                  }
-                />
-              </ListItemIcon>
-            </MenuItem>
-            {options.map((option) => (
-              <MenuItem key={option} value={option}>
-                <ListItemIcon>
-                  <Checkbox checked={selectedSkills.indexOf(option) > -1} />
-                </ListItemIcon>
-                <ListItemText primary={option} />
-              </MenuItem>
-            ))}
-          </Select>
+              {options.map((option) => (
+                <MenuItem key={option} value={option}>
+                  <ListItemIcon>
+                    <Checkbox checked={selectedSkills.indexOf(option) > -1} />
+                  </ListItemIcon>
+                  <ListItemText primary={option} />
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
+          <Box style={{ width: "100%", marginBottom: '15px' }}>
+            <Button
+              type="button"
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+            >
+              Save
+            </Button>
+          </Box>
         </Box>
-        <Box>
-          <Button
-            type="button"
-            variant="contained"
-            color="primary"
-            onClick={handleSubmit}
-          >
-            Save
-          </Button>
-        </Box>
-        <PlayerList />
+
+        {players.length > 0 && (
+          <Box>
+            <PlayerList />
+          </Box>
+        )}
         <Notifier
           open={showNotifier}
           msg={notifierMsg}

@@ -17,7 +17,7 @@ function SelectOption({ id, list, selected, setSelected, isSkills, uniqueRoleErr
   };
 
   return (
-    <FormControl className={classes.formControl}  sx={{margin: '10px'}}>
+    <FormControl className={classes.formControl} sx={{ margin: '10px' }}>
       <InputLabel id={`${label}+${id}`}>{label}</InputLabel>
       <Select
         labelId={`${label}+${id}`}
