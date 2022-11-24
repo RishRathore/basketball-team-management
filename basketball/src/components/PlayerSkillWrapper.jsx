@@ -8,6 +8,8 @@ const PlayerSkillWrapper = ({
   uniqueRole,
   teamPlayers,
   id,
+  quaterErr,
+  setQuaterErr
 }) => {
   const { players = [] } = useSelector((state) => state.basketball);
 
@@ -24,7 +26,8 @@ const PlayerSkillWrapper = ({
 
   const verifyRole = (value) => {
     setRoleErr({errMsg: "",  roleErr: true });
-
+    setQuaterErr({  errMsg: "",
+    globalErr: false,})
     const isId = uniqueRole.find((c) => c.userId === selectedPlayer);
     const isSkil = uniqueRole.find((c) => c.skil === value);
 
@@ -57,7 +60,8 @@ const PlayerSkillWrapper = ({
 
   const verifyPlayer = (value, id) => {
     setPlayerErr({ playerErr: false, errMsg: ""});
-
+    setQuaterErr({  errMsg: "",
+    globalErr: false,})
     const isId = teamPlayers.find((c) => c === value);
 
     if (teamPlayers && teamPlayers.includes(value)) {
@@ -93,6 +97,8 @@ const PlayerSkillWrapper = ({
         setSelected={verifyPlayer}
         selected={selectedPlayer}
         uniqueRoleErr={playerErr}
+        quaterErr ={quaterErr}
+
       />
       <SelectButton
         label="Position"
@@ -100,6 +106,7 @@ const PlayerSkillWrapper = ({
         setSelected={verifyRole}
         selected={selectedSkil}
         uniqueRoleErr={roleErr}
+        quaterErr={quaterErr}
       />
     </Box>
   );

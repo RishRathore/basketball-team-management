@@ -4,16 +4,21 @@ import Box from "@mui/material/Box";
 import PlayerSkillWrapper from "./PlayerSkillWrapper";
 import Button from "@mui/material/Button";
 import { createTeam } from "../redux/features/playerSlices";
+import Notifier from './Notifier';
 
 const QuaterBlock = () => {
   const dispatch = useDispatch();
 
   const [teamPlayers, setTeamPlayers] = useState([]);
   const [uniqueRole, setUniqueRole] = useState([]);
-  const [formErr, setFormErr] = useState(false);        // On submit Error check
+  const [showNotifier, toggleNotifier] = useState(false)
+  const [notifierMsg, setNotifierMsg] = useState('')
+  const [quaterErr, setQuaterErr] = useState({
+     errMsg: "",
+     globalErr: false,
+    })
 
   const setUniqueValue = (value, player, updated) => {
-    setFormErr(false)
     if (player) {
       setTeamPlayers(updated);
     } else if (!player && updated) {
@@ -24,12 +29,24 @@ const QuaterBlock = () => {
   };
 
   const handleSubmit = () => {
-    if (uniqueRole.length === 5 && teamPlayers.length === 5) {
+     if(teamPlayers.length <=0 ){
+      setQuaterErr({ globalErr: true, errMsg: "All fields are required"});
+     }
+     
+   else if (uniqueRole.length === 5 && teamPlayers.length === 5) {
+      handleNotifier()
+      setNotifierMsg('Player added !')
       dispatch(createTeam(uniqueRole));
     } else {
-      setFormErr(true)
+      handleNotifier()
+      setNotifierMsg('Please check form !')
     }
   };
+
+  const handleNotifier = () => {
+    toggleNotifier(!showNotifier)
+  }
+
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -39,6 +56,8 @@ const QuaterBlock = () => {
           setUniqueValue={setUniqueValue}
           uniqueRole={uniqueRole}
           teamPlayers={teamPlayers}
+          quaterErr={quaterErr}
+          setQuaterErr={setQuaterErr}
         />
       ))}
       <Box style={{ marginTop: '30px' }}>
@@ -51,7 +70,11 @@ const QuaterBlock = () => {
           Save
         </Button>
       </Box>
-      {formErr && <Box sx={{ color: 'red', margin: '10px' }}>Please fill all the fields!</Box>}
+      <Notifier
+          open={showNotifier}
+          msg={notifierMsg}
+          handleClose={handleNotifier}
+        />
     </Box>
   );
 };

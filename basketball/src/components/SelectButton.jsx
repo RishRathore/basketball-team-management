@@ -8,7 +8,7 @@ import Box from "@material-ui/core/Box";
 import { useStyles } from "../utils/styles";
 
 
-function SelectOption({ id, list, selected, setSelected, uniqueRoleErr, label }) {
+function SelectOption({ id, list, selected, setSelected, uniqueRoleErr, label, quaterErr, setQuaterErr}) {
   const classes = useStyles();
 
   const handleChange = (event) => {
@@ -32,7 +32,7 @@ function SelectOption({ id, list, selected, setSelected, uniqueRoleErr, label })
           </MenuItem>
         ))}
       </Select>
-      {(uniqueRoleErr?.playerErr || uniqueRoleErr?.roleErr) && <Box>{uniqueRoleErr?.errMsg}</Box>}
+      {(uniqueRoleErr?.playerErr || uniqueRoleErr?.roleErr || quaterErr.globalErr) && <Box style={{color: "red", fontSize: "12px", marginTop: "5px"}}>{uniqueRoleErr?.errMsg} {quaterErr.errMsg}</Box>}
     </FormControl>
   );
 }

@@ -133,11 +133,10 @@ const Player = () => {
             variant="filled"
             name="firstName"
             value={formValues.firstName.value}
-            placeholder="First Name"
+            label="First Name"
             onChange={handleChange}
             error={formValues.firstName.error}
             helperText={formValues.firstName.error && formValues.firstName.errorMessage}
-            required
             style={{ width: '100%' }}
           />
           <TextField
@@ -145,11 +144,10 @@ const Player = () => {
             variant="filled"
             name="lastName"
             value={formValues.lastName.value}
-            placeholder="Last Name"
+            label="Last Name"
             onChange={handleChange}
             error={formValues.lastName.error}
             helperText={formValues.lastName.error && formValues.lastName.errorMessage}
-            required
             style={{ width: '100%' }}
           />
           <TextField
@@ -157,11 +155,10 @@ const Player = () => {
             variant="filled"
             name="height"
             value={formValues.height.value}
-            placeholder="Height"
+            label="Height"
             onChange={handleChange}
             error={formValues.height.error}
             helperText={formValues.height.error && formValues.height.errorMessage}
-            required
             style={{ width: '100%' }}
           />
           <FormControl style={{ width: "100%", marginBottom: '15px' }} className={classes.formControl}>
@@ -171,7 +168,6 @@ const Player = () => {
               select
               label="Skills"
               // value={selectedSkills}
-              placeholder="Skills"
               error={formValues.skills.error}
               helperText={
                 formValues.skills.error && formValues.skills.errorMessage
