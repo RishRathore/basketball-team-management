@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+import TextField from '@material-ui/core/TextField';
 import Button from '@mui/material/Button';
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
-import ListItemIcon from "@material-ui/core/Checkbox";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,25 +27,16 @@ const Player = () => {
 
   const { players } = useSelector(state => state.basketball);
 
-  const isAllSelected =
-    options.length > 0 && selectedSkills.length === options.length;
-
   const handleSelectChange = (event) => {
     const value = event.target.value;
-    let selectedData;
-
-    if (value[value.length - 1] === "all") {
-      selectedData = selectedSkills.length === options.length ? [] : options
-    } else selectedData = value
-
-    setSelectedSkills(selectedData)
+    setSelectedSkills(value);
     setFormValues({
       ...formValues,
       skills: {
         ...formValues['skills'],
         value
       }
-    })
+    });
   };
 
   const handleChange = (e) => {
