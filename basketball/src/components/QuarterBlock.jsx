@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import Notifier from './Notifier';
-import PlayerSkillWrapper from "./PlayerSkillWrapper";
-import { createTeam } from "../redux/features/playerSlices";
-import { roleInitialValue, playersInitialValue } from "../utils/constants"
 import Box from "@mui/material/Box";
+import PlayerSkillWrapper from "./PlayerSkillWrapper";
+import { roleInitialValue, playersInitialValue } from "../utils/constants"
+import { createTeam } from "../redux/features/playerSlices";
+import Notifier from './Notifier';
 import Button from "@mui/material/Button";
 
 const QuaterBlock = () => {
   const dispatch = useDispatch();
 
-  const [teamPlayers, setTeamPlayers] = useState(playersInitialValue); // set  players value
+  const [teamPlayers, setTeamPlayers] = useState(playersInitialValue); // set players value
   const [playerRole, setPlayerRole] = useState(roleInitialValue);   // set players role
   const [showNotifier, toggleNotifier] = useState(false);
   const [notifierMsg, setNotifierMsg] = useState('');
@@ -46,6 +46,7 @@ const QuaterBlock = () => {
       dispatch(createTeam(data));      // dispatch team to redux
     } else {
       handleNotifier()
+      setNotifierMsg('Please check form !')
       setQuaterErr({ error : true, errMsg: "* Required"});
     }
   };

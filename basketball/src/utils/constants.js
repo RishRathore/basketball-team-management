@@ -35,4 +35,12 @@ export const roleInitialValue = [
   { index: 2, id: null, error: false, role: null },
   { index: 3, id: null, error: false, role: null },
   { index: 4, id: null, error: false, role: null },
-];  
+];
+
+export const playersInitialValue = [
+  { index: 0, id: null, error: false, player: null },
+  { index: 1, id: null, error: false, player: null },
+  { index: 2, id: null, error: false, player: null },
+  { index: 3, id: null, error: false, player: null },
+  { index: 4, id: null, error: false, player: null },
+];
