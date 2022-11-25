@@ -1,45 +1,52 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import Box from "@mui/material/Box";
-import PlayerSkillWrapper from "./PlayerSkillWrapper";
-import Button from "@mui/material/Button";
-import { createTeam } from "../redux/features/playerSlices";
 import Notifier from './Notifier';
+import PlayerSkillWrapper from "./PlayerSkillWrapper";
+import { createTeam } from "../redux/features/playerSlices";
+import { roleInitialValue, playersInitialValue } from "../utils/constants"
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 
 const QuaterBlock = () => {
   const dispatch = useDispatch();
 
-  const [teamPlayers, setTeamPlayers] = useState([]);
-  const [uniqueRole, setUniqueRole] = useState([]);
-  const [showNotifier, toggleNotifier] = useState(false)
-  const [notifierMsg, setNotifierMsg] = useState('')
-  const [quaterErr, setQuaterErr] = useState({
-     errMsg: "",
-     globalErr: false,
-    })
+  const [teamPlayers, setTeamPlayers] = useState(playersInitialValue); // set  players value
+  const [playerRole, setPlayerRole] = useState(roleInitialValue);   // set players role
+  const [showNotifier, toggleNotifier] = useState(false);
+  const [notifierMsg, setNotifierMsg] = useState('');
+  const [quaterErr, setQuaterErr] = useState({errMsg: "", error: false});
+  const [watcher, setWatcher] = useState({      // watching length of teamPlayers & playerRole
+    playerLength: 0,
+    roleLength: 0,
+  });
 
-  const setUniqueValue = (value, player, updated) => {
+  // get button state disable/enable
+  const buttonStatus = (((watcher.roleLength === 5) && (watcher.playerLength === 5) ) ? false : true);
+  
+
+  //  setUniqueValue => common function to set state of teamPlayers and there role from playerskillswrappper;
+  const setUniqueValue = (player, updatedRef) => { 
     if (player) {
-      setTeamPlayers(updated);
-    } else if (!player && updated) {
-      setUniqueRole(updated);
+      setTeamPlayers(updatedRef);
+      getUnique(updatedRef, false);
     } else {
-      setUniqueRole([...uniqueRole, value]);
+      setPlayerRole(updatedRef);
+      getUnique(updatedRef, true);
     }
   };
+  
 
   const handleSubmit = () => {
-     if(teamPlayers.length <=0 ){
-      setQuaterErr({ globalErr: true, errMsg: "All fields are required"});
-     }
-     
-   else if (uniqueRole.length === 5 && teamPlayers.length === 5) {
+   if (watcher.roleLength >= 5 && watcher.playerLength >= 5) {
       handleNotifier()
-      setNotifierMsg('Player added !')
-      dispatch(createTeam(uniqueRole));
+      setNotifierMsg('Team Created')
+      const data = playerRole.map(a => {                // setting skills and playername in reudx
+        return { skill: a.id, playerName: a.playerName}
+      })
+      dispatch(createTeam(data));      // dispatch team to redux
     } else {
       handleNotifier()
-      setNotifierMsg('Please check form !')
+      setQuaterErr({ error : true, errMsg: "* Required"});
     }
   };
 
@@ -47,14 +54,30 @@ const QuaterBlock = () => {
     toggleNotifier(!showNotifier)
   }
 
+  // geting unique values of teamplayers and player role
+  const getUnique = (array, roleLength) => {
+    const unique = array.filter(function (v) {
+      return (
+        array.filter(function (v1) {
+          return v1.id === v.id && v.id;
+        }).length === 1
+      );
+    });
+    if(roleLength) {
+      setWatcher({ ...watcher, roleLength: unique.length}); // updating role length
+    } else {
+      setWatcher({ ...watcher, playerLength: unique.length}); // updating player length
+    }
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       {[0, 1, 2, 3, 4].map((p) => (
         <PlayerSkillWrapper
+          key={p}
           id={p}
           setUniqueValue={setUniqueValue}
-          uniqueRole={uniqueRole}
+          playerRole={playerRole}
           teamPlayers={teamPlayers}
           quaterErr={quaterErr}
           setQuaterErr={setQuaterErr}
@@ -66,6 +89,7 @@ const QuaterBlock = () => {
           variant="contained"
           color="primary"
           onClick={handleSubmit}
+          disabled={buttonStatus}
         >
           Save
         </Button>

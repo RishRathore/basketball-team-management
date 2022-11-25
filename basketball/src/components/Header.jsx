@@ -19,7 +19,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   };
 
   const onTabChange = (index) => {
-    if (index === 1 && players.length !== 5) setOpen(true);
+    if (index === 1 && players.length < 5) setOpen(true);
     else setActiveTab(index);
   };
 

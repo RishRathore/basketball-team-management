@@ -1,4 +1,11 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import PlayerList from './PlayerList';
+import Notifier from './Notifier';
+import { addPlayer } from '../redux/features/playerSlices';
+import { useStyles, MenuProps } from "../utils/styles";
+import { options, initialValues } from "../utils/constants";
+import { v4 as uuidv4 } from 'uuid';
 import Box from '@mui/material/Box';
 import TextField from '@material-ui/core/TextField';
 import Button from '@mui/material/Button';
@@ -7,14 +14,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from 'uuid';
 
-import PlayerList from './PlayerList';
-import Notifier from './Notifier';
-import { addPlayer } from '../redux/features/playerSlices';
-import { useStyles, MenuProps } from "../utils/styles";
-import { options, initialValues } from "../utils/constants";
 
 const Player = () => {
   const classes = useStyles();
@@ -167,7 +167,6 @@ const Player = () => {
               variant="filled"
               select
               label="Skills"
-              // value={selectedSkills}
               error={formValues.skills.error}
               helperText={
                 formValues.skills.error && formValues.skills.errorMessage

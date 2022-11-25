@@ -1,111 +1,98 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
 import SelectButton from "./SelectButton";
 import { useSelector } from "react-redux";
+import { findDuplicates } from "../utils";
+import Box from "@mui/material/Box";
 
 const PlayerSkillWrapper = ({
   setUniqueValue,
-  uniqueRole,
+  playerRole,
   teamPlayers,
   id,
   quaterErr,
-  setQuaterErr
+  setQuaterErr,
 }) => {
+
   const { players = [] } = useSelector((state) => state.basketball);
 
+  //
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [selectedSkil, setSelectedSkil] = useState(null);
-  const [roleErr, setRoleErr] = useState({
-    errMsg: "",
-    roleErr: false,
-  });
-  const [playerErr, setPlayerErr] = useState({
-    errMsg: "",
-    playerErr: false
-  });
 
-  const verifyRole = (value) => {
-    setRoleErr({errMsg: "",  roleErr: true });
-    setQuaterErr({  errMsg: "",
-    globalErr: false,})
-    const isId = uniqueRole.find((c) => c.userId === selectedPlayer);
-    const isSkil = uniqueRole.find((c) => c.skil === value);
+  // getting error if already selected player and role
+  const isPlayerError = teamPlayers.filter((a) => a?.index === id)[0]?.error;   
+  const isRoleErr = playerRole.filter((a) => a?.index === id)[0]?.error;
 
-    if (uniqueRole.length > 0 && isId) {
-      if (isSkil && isId.userId === selectedPlayer) {
-        setRoleErr({errMsg: "Already selected", roleErr: true });
-        setSelectedSkil(value);
-      } else {
-        setRoleErr({errMsg: "", roleErr: false });
-        const players = { userId: selectedPlayer, skil: value };
-        const updated = uniqueRole.map((a) =>
-          a.userId === selectedPlayer ? players : a
-        );
-        setSelectedSkil(players);
-        setUniqueValue(players, false, updated);
-      }
-    } else if (!isId && isSkil) {
-        setRoleErr({errMsg: "Already selected", roleErr: true });
-      setSelectedSkil(isSkil);
-    } else if (isSkil) {
-      setSelectedSkil(isSkil);
-      setUniqueValue(null, false, uniqueRole);
-    } else {
-        setRoleErr({errMsg: "", roleErr: false });
-      const players = { userId: selectedPlayer, skil: value };
-      setSelectedSkil(players);
-      setUniqueValue(players, false);
-    }
-  };
-
+  //  handle player change and updating team player
   const verifyPlayer = (value, id) => {
-    setPlayerErr({ playerErr: false, errMsg: ""});
-    setQuaterErr({  errMsg: "",
-    globalErr: false,})
-    const isId = teamPlayers.find((c) => c === value);
-
-    if (teamPlayers && teamPlayers.includes(value)) {
-      if (teamPlayers[id] === value) {
-        setPlayerErr({ playerErr: false, errMsg: ""});
-        setSelectedPlayer(value);
-      } else if (isId === value) {
-        setPlayerErr({ playerErr: true, errMsg: "Player can be selected only once"});
-        setSelectedPlayer(value);
-      }
-    } else {
-      let teamPlayersRef = teamPlayers;
-      teamPlayersRef[id] = value;
-      setSelectedPlayer(value);
-      setUniqueValue(value, true, teamPlayersRef, id);
-    }
+    setQuaterErr({ error: false, errMsg: "" });
+    const player = players.filter((a) => a.id === value)[0];
+    const data = {
+      index: id,
+      id: value,
+      error: false,
+      player: player,
+    };
+    let teamPlayersRef = [...teamPlayers];
+    teamPlayersRef[id] = data;
+    setUniqueValue(true, teamPlayersRef);
+    findDuplicates(teamPlayersRef, data);   // validate that player is Already selected or not
+    setSelectedPlayer(data);
   };
 
+    //  handle role change and updating player role
+  const verifyRole = (value, id) => {
+    setQuaterErr({ error: false, errMsg: "" });
+    const player = players.filter((a) => a.id === selectedPlayer.id)[0];
+    const data = {
+      index: id,
+      id: value,
+      role: value,
+      error: false,
+      playerName: player.firstName,
+    };
+    let playerRoleRef = [...playerRole];
+    playerRoleRef[id] = data;
+    setUniqueValue(false, playerRoleRef);
+    findDuplicates(playerRoleRef, data);       // validate that role is Already selected or not
+    setSelectedSkil(value);
+  };
+
+  // getting skills for selected player id
   const skillsList = () => {
-    if (selectedPlayer) {
-      return players.filter((p) => p.id === selectedPlayer)[0].skills;
+    if (selectedPlayer?.id) {
+      return players.filter((p) => p.id === selectedPlayer?.id)[0]?.skills;
     } else {
       return [""];
     }
   };
 
   return (
-    <Box sx={{ margin: "25px 0px 0px 0px", padding: '0px 15px 0px 15px', display: 'flex', gap: '20px', justifyContent: 'center' }}>
+    <Box
+      sx={{
+        margin: "25px 0px 0px 0px",
+        padding: "0px 15px 0px 15px",
+        display: "flex",
+        gap: "20px",
+        justifyContent: "center",
+      }}
+    >
       <SelectButton
         label="Player Name"
         id={id}
         list={players}
-        setSelected={verifyPlayer}
+        onSelectChange={verifyPlayer}
         selected={selectedPlayer}
-        uniqueRoleErr={playerErr}
-        quaterErr ={quaterErr}
-
+        playerErr={isPlayerError}
+        quaterErr={quaterErr}
       />
       <SelectButton
-        label="Position"
+        label="Role"
+        id={id}
         list={skillsList()}
-        setSelected={verifyRole}
+        onSelectChange={verifyRole}
         selected={selectedSkil}
-        uniqueRoleErr={roleErr}
+        roleErr={isRoleErr}
         quaterErr={quaterErr}
       />
     </Box>
